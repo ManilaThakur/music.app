@@ -35,6 +35,15 @@ var result
 			song.play();
 	 }
 	 
+	 if(result == "pause the song"){
+		 $('.fa-microphone').addClass("active");
+		 var song = document.querySelector('audio');
+		 
+			console.log('Pausing');
+			$('.play-icon').removeClass('fa-pause').addClass('fa-play');
+			song.pause();
+	 }
+	 
 	 
 	 
 	 
