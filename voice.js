@@ -15,17 +15,21 @@ var result
 	recognition.interimResults = false;
 	recognition.maxAlternatives = 1;
 	
-	$('.fa-microphone').on('click', function() {
+	$('.fa-microphone').on('click',function() {
+		$('.fa-microphone').removeClass("active");
   recognition.start();
   console.log('Ready to receive a options command.');
-	});
+	})
 
 	recognition.onresult = function(event) {
+		
 	var last = event.results.length - 1;
-	 var color = event.results[last][0].transcript;
-	 if(result=="play"){
-		 $('.fa-microphone').addclass("class");
+	 result = event.results[last][0].transcript;
+	 
+	 if(result == "play the song"){
+		 $('.fa-microphone').addClass("active");
 		 var song = document.querySelector('audio');
+		 
 			console.log('Playing');
 			$('.play-icon').removeClass('fa-play').addClass('fa-pause');
 			song.play();
@@ -40,5 +44,7 @@ var result
 	//recognition.onspeechend = function() {
 	//  recognition.stop();
 	//}
+	
+	
 	
 	

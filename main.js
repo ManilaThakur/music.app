@@ -35,6 +35,11 @@
 					var willLoop = 0;
 					var willShuffle = 0; // will use this soon
 
+					function setvolume(){
+						var song =document.querySelector('audio');
+						song.volume =slider.value/100;
+						
+					}
 					
 					//Toggle function is added
 			function toggleSong() {
@@ -51,13 +56,7 @@
 			}
 			}
 			
-			 function UpdateTimer(){
-		var song = document.querySelector('audio');
-		var ct = song.CurrentTime;
-		var td = song.duration;
-		var percentage = (ct/td)*100;
-		$('.progress-filled').css('width', percentage+ "%")
-	}
+			
 	
 	//Time format changes
 			function fancyTimeFormat(time)
@@ -79,6 +78,14 @@
 			return ret;
 			}
 			
+			 function updateTimer(){
+		var song = document.querySelector('audio');
+		var ct = song.currentTime;
+		var td = song.duration;
+		var percentage = (ct/td)*100;
+		$('.progress-filled').css('width', percentage+ "%");
+	}
+			
 			function changeCurrentSongDetails(songObj) {
     $('.current-song-image').attr('src','img/' + songObj.image);
     $('.current-song-name').text(songObj.name);
@@ -92,11 +99,7 @@
     song.currentTime = song.duration - 5;
      }
 	 
-	 function randomExcluded(min, max, excluded) {
-    var n = Math.floor(Math.random() * (max-min) + min);
-    if (n >= excluded) n++;
-    return n;
-}
+	
 			
 				
 	//current time updation
@@ -130,6 +133,12 @@
 			});
 			}
 			
+			 function randomExcluded(min, max, excluded) {
+    var n = Math.floor(Math.random() * (max-min) + min);
+    if (n >= excluded) n++;
+    return n;
+}
+	
 				
 				window.onload = function() {
 					
@@ -137,6 +146,7 @@
 				updateCurrentTime();
 				setInterval(function(){
 				updateCurrentTime();
+				updateTimer();
 				},1000);
 				//var songName1 = 'Tamma Song';
 				//var songName2 = 'Humma Song';
@@ -203,7 +213,7 @@
     }
 });
 
-       toggleSong(); // Play Next Song
+      
         changeCurrentSongDetails(songs[0]); // Update Image
         currentSongNumber = currentSongNumber + 1; // Change State
     
@@ -216,11 +226,22 @@
 			$('.fa-random').toggleClass('disabled')
 			willShuffle = 1 - willShuffle;
 		});
+		
+		$('#slider').on('mousemove',function(){
+			setvolume();
+		});
 
-
-		$('audio').on('ended',function() {
+$('audio').on('ended',function() {
     var audio = document.querySelector('audio');
-    if(currentSongNumber < 4) {
+    if (willShuffle == 1) {
+        var nextSongNumber = randomExcluded(1,4,currentSongNumber); // Calling our function from Stackoverflow
+        var nextSongObj = songs[nextSongNumber-1];
+        audio.src = nextSongObj.fileName;
+        toggleSong();
+        changeCurrentSongDetails(nextSongObj);
+        currentSongNumber = nextSongNumber;
+    }
+    else if(currentSongNumber < 4) {
         var nextSongObj = songs[currentSongNumber];
         audio.src = nextSongObj.fileName;
         toggleSong();
