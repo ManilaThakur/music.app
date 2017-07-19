@@ -1,4 +1,5 @@
-					var songs = [{
+					//declaration of array of objects 
+						var songs = [{
 						'name': 'Love me like you do',
 						'artist': 'Ellie Goulding',
 						'album': 'Fifty Shades of Grey',
@@ -30,11 +31,12 @@
 						'fileName': 'song4.mp3', 
 						 'image': 'song4.jpg',
 					}]
-					
+					// variable declaration
 					var currentSongNumber = 1;
 					var willLoop = 0;
 					var willShuffle = 0; // will use this soon
-
+					
+                   //function for volume control
 					function setvolume(){
 						var song =document.querySelector('audio');
 						song.volume =slider.value/100;
@@ -59,7 +61,7 @@
 			
 			
 	
-	//Time format changes
+	//Time format changes fromm seconds to minutes
 			function fancyTimeFormat(time)
 			{   
 			// Hours, minutes and seconds
@@ -78,7 +80,8 @@
 			ret += "" + secs;
 			return ret;
 			}
-			
+		
+		//function for slider
 			 function updateTimer(){
 		var song = document.querySelector('audio');
 		var ct = song.currentTime;
@@ -87,6 +90,7 @@
 		$('.progress-filled').css('width', percentage+ "%");
 	}
 			
+			// changes details of song 
 			function changeCurrentSongDetails(songObj) {
     $('.current-song-image').attr('src','img/' + songObj.image);
     $('.current-song-name').text(songObj.name);
@@ -141,7 +145,7 @@
     return n;
 }
 	
-				
+				//main screen settings
 				window.onload = function() {
 					
 			  changeCurrentSongDetails(songs[0]);
@@ -161,7 +165,7 @@
 				 // var albumList = ['Badrinath ki Dulhania','Ok Jaanu','Befikre','Ae Dil Hai Mushkil'];
 					//var durationList = ['2:56','3:15','2:34','2:29'];
 					
-
+                 //loop is created for smooth working of platlist
 				 for(var i =0; i < songs.length;i++) {
 					var Obj = songs[i];
 					var name = '#song' + (i+1);
@@ -188,7 +192,7 @@
 				}
 				
 		
-	
+	//settings of welcome-screen and main-screen
     $('.welcome-screen button').on('click', function() {
         var name = $('#name-input').val();
         if (name.length > 2) {
@@ -218,23 +222,23 @@
       
         changeCurrentSongDetails(songs[0]); // Update Image
        // currentSongNumber = currentSongNumber + 1; // Change State
-    
+    //loop is added
 		  $('.fa-repeat').on('click',function() {
 			$('.fa-repeat').toggleClass('disabled');
 			willLoop = 1 - willLoop;
 		});
-
+     //shuffle is added
 		$('.fa-random').on('click',function() {
 			$('.fa-random').toggleClass('disabled');
 			willShuffle = 1 - willShuffle;
 		});
-		
+	//mousemove function added to volume control	
 		$('#slider').on('mousemove',function()
 		{
 			setvolume();
 			
 		});
-		
+	//click function added to volume control	
 		$('#slider').on('click',function()
 		{
 			setvolume();
@@ -271,22 +275,88 @@ $('audio').on('ended',function() {
         $('.play-icon').removeClass('fa-pause').addClass('fa-play');
         audio.currentTime = 0;
     }
-});
+		});
+
+//variable declaration
+		  var Playingnumber = 0  ;
+		var shuffle=0;
+		var equal = 0;
 
 
-   $('.fa-step-forward ').on('click',function() {
+
+
+		function changeSong() 
+		{
+		var music =  songs[Playingnumber].fileName;
+		var song = document.querySelector("audio");
+		song.src = music;
+		toggleSong();
+		changeCurrentSongDetails(songs[Playingnumber])
+		}
+
+
+
+
+        // forward the song
+
+			$(".fa-step-forward").click(function(){
+
+			if(shuffle==1)
+			{
 			var audio = document.querySelector('audio');
-			var nextSongObj = songs[currentSongNumber];
-			audio.src = nextSongObj.filename;
+			var nextSongNumber = randomExcluded(0,3,Playingnumber); // Calling our function from Stackoverflow
+
+			var nextSongObj = songs[nextSongNumber];
+			audio.src = nextSongobj.fileName;
 			toggleSong();
-			changeCurrentSongDetails(nextSongObj);
-			//currentSongNumber = currentSongNumber + 1;
-			if(currentSongNumber == 6){
-			 $('.fa-step-forward ').toggleClass('disabled');
-			  $('.play-icon').removeClass('fa-play').addClass('fa-pause');
+			changeCurrentSongDetails(nextSongobj);
+			Playingnumber = nextSongNumber;
+
+
 			}
-		});
-		
-		$('audio').on('ended',function(){
-			toggleClass();
-		});
+
+
+			else {
+
+			if(Playingnumber == songs.length-1){
+			Playingnumber = 0;
+			changeSong();
+			}
+
+			else {
+			console.log("two");
+			console.log(Playingnumber);
+			Playingnumber++;
+			changeSong();
+			}
+
+			}
+
+			})
+
+
+
+          //backward the song
+			$(".fa-step-backward").click(function(){
+
+			if(Playingnumber == 0){
+			console.log("one");
+			Playingnumber = (songs.length-1);
+			changeSong();
+
+
+
+
+			}
+
+			else {
+			console.log("two");
+			console.log(Playingnumber);
+			Playingnumber--;
+			changeSong();
+			}
+
+
+
+
+			})

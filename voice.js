@@ -2,8 +2,8 @@ var result
  var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
 	var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
 	var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent
-	
-	var options = [ 'play the song' , 'pause the song' , 'shuffle the song' ];
+	// commands are added
+	var options = [ 'play the song' , 'pause the song' ];
 	var grammar = '#JSGF V1.0; grammar options; public <options> = ' + options.join(' | ') + ' ;'
 
 	var recognition = new SpeechRecognition();
@@ -14,7 +14,7 @@ var result
 	recognition.lang = 'en-US';
 	recognition.interimResults = false;
 	recognition.maxAlternatives = 1;
-	
+	// allowment of microphone
 	$('.fa-microphone').on('click',function() {
 		$('.fa-microphone').removeClass("active");
   recognition.start();
@@ -25,7 +25,7 @@ var result
 		
 	var last = event.results.length - 1;
 	 result = event.results[last][0].transcript;
-	 
+	 // play command id added
 	 if(result == "play the song"){
 		 $('.fa-microphone').addClass("active");
 		 var song = document.querySelector('audio');
@@ -34,7 +34,7 @@ var result
 			$('.play-icon').removeClass('fa-play').addClass('fa-pause');
 			song.play();
 	 }
-	 
+	 // pause command is added
 	 if(result == "pause the song"){
 		 $('.fa-microphone').addClass("active");
 		 var song = document.querySelector('audio');
